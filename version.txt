@@ -4,19 +4,25 @@ from PIL import Image
 # Загружаем видео
 video = VideoFileClip("your_video.mp4")
 
-# Загружаем изображение и уменьшаем прозрачность
-image = Image.open("your_image.png").convert("RGBA")
+try:
+    # Загружаем изображение и уменьшаем прозрачность
+    image = Image.open("your_image.png").convert("RGBA")
 
-# Уменьшаем альфа-канал
-alpha = image.split()[-1]
-alpha = alpha.point(lambda p: p * 0.3)  # Уменьшаем прозрачность до 30%
+    # Уменьшаем альфа-канал
+    alpha = image.split()[-1]
+    alpha = alpha.point(lambda p: p * 0.3)  # Уменьшаем прозрачность до 30%
 
-# Создаем новое изображение с измененной прозрачностью
-new_image = Image.new("RGBA", image.size)
-new_image = Image.alpha_composite(new_image, image.putalpha(alpha))
+    # Создаем новое изображение с измененной прозрачностью
+    new_image = Image.new("RGBA", image.size)
+    new_image = Image.alpha_composite(new_image, image.putalpha(alpha))
 
-# Сохраняем новое изображение
-new_image.save("your_image_transparent.png")
+    # Сохраняем новое изображение
+    new_image.save("your_image_transparent.png")
+    
+except FileNotFoundError:
+    print("Не удалось найти изображение или видео. Проверьте путь к файлам.")
+except Exception as e:
+    print(f"Произошла ошибка: {e}")
 
 # Загружаем новое изображение с уменьшенной прозрачностью в moviepy
 image_clip = ImageClip("your_image_transparent.png")
